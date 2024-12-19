@@ -92,6 +92,22 @@ while ($row = $result->fetch_assoc()) {
         /* Más oscuro al pasar el cursor */
         color: #FFFFFF;
     }
+
+    /* Asegura que el contenedor del gráfico sea flexible */
+    .chart-container {
+        position: relative;
+        width: 100%;
+        height: 50vh;
+        /* Esto asegura que la altura sea responsive */
+    }
+
+    /* Opcional: Puedes añadir un poco de margen o padding para un mejor diseño en dispositivos móviles */
+    @media (max-width: 768px) {
+        .chart-container {
+            height: 40vh;
+            /* Ajusta la altura en pantallas más pequeñas */
+        }
+    }
 </style>
 
 <body class="container-index">
@@ -105,10 +121,10 @@ while ($row = $result->fetch_assoc()) {
                 <div class="d-flex justify-content-center mt-1">
                     <div class="text-center p-1" style="filter: brightness(0.8); background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
                         <h2 class="text-white fw-bold mb-0">Bienvenido a Adonai Store</h2>
-                        <p class="pb-0 mb-0">Stock de Productos</p>
+                        <p class="pb-0 mb-0 text-white ">Stock de Productos</p>
                     </div>
                 </div>
-                <div class="container bg-white mt-1" style="max-height: 460px;">
+                <div class="container bg-white mt-1 chart-container" style="max-height: 460px;">
                     <canvas id="productosChart"></canvas>
                 </div>
             </div>
@@ -116,10 +132,10 @@ while ($row = $result->fetch_assoc()) {
                 <div class="d-flex justify-content-center mt-1">
                     <div class="text-center p-1" style="filter: brightness(0.8); background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
                         <h2 class="text-white fw-bold mb-0">Bienvenido a Adonai Store</h2>
-                        <p class="pb-0 mb-0">Cantidad de productos vendidos por fecha en los ultimos 5 dias</p>
+                        <p class="pb-0 mb-0 text-white ">Cantidad de productos vendidos por fecha en los ultimos 5 dias</p>
                     </div>
                 </div>
-                <div class="container bg-white mt-1" style="max-height: 460px;">
+                <div class="container bg-white mt-1 chart-container" style="max-height: 460px;">
                     <canvas id="ventasChart"></canvas>
                 </div>
             </div>
@@ -167,6 +183,8 @@ while ($row = $result->fetch_assoc()) {
                 }]
             },
             options: {
+                responsive: true, // Hacer el gráfico responsive
+                maintainAspectRatio: false, // No mantener la relación de aspecto original
                 onClick: function(event, elements) {
                     if (elements.length > 0) {
                         let index = elements[0].index;
@@ -192,6 +210,9 @@ while ($row = $result->fetch_assoc()) {
                                 return stock < 5 ? 'red' : 'black'; // Cambia el color del texto
                             }
                         }
+                    },
+                    x: {
+                        beginAtZero: true
                     },
                     y: {
                         beginAtZero: true
@@ -241,8 +262,12 @@ while ($row = $result->fetch_assoc()) {
                 datasets: datasets
             },
             options: {
-                responsive: true,
+                responsive: true, // Hacer el gráfico responsive
+                maintainAspectRatio: false, // No mantener la relación de aspecto original
                 scales: {
+                    x: {
+                        beginAtZero: true
+                    },
                     y: {
                         beginAtZero: true
                     }

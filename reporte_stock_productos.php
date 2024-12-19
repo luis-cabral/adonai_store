@@ -62,78 +62,97 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         <h2>Reporte de Stock de Productos</h2>
         <?php if ($_SESSION['usuario']["rol"] == 1 || $_SESSION['usuario']["rol"] == 3): ?><a href="#" class="btn btn-principal mb-3" data-bs-toggle="modal" data-bs-target="#addProductoModal">Agregar Producto</a><?php endif; ?>
 
-        <!-- Tabla de productos -->
-        <table class="table table-striped table-responsive caption-top mb-3">
-            <caption>
-                <div class="btn-group">
-                    <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                        Lista de <?php echo $num_results_on_page ?> Registros de <?php echo $total_pages ?>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
-                        <li><a class="dropdown-item" href="reporte_stock_productos.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=5&prov=<?php echo $id_proveedor; ?>">5</a></li>
-                        <li><a class="dropdown-item" href="reporte_stock_productos.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=10&prov=<?php echo $id_proveedor; ?>">10</a></li>
-                        <li><a class="dropdown-item" href="reporte_stock_productos.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=15&prov=<?php echo $id_proveedor; ?>">15</a></li>
-                    </ul>
-                </div>
-            </caption>
-            <thead class="table-principal">
-                <tr>
-                    <th>Descripcion</th>
-                    <th>Stock</th>
-                    <th>
-                        <div class="btn-group">
-                            <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="ProveedorDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                Proveedor
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="ProveedorDropdown">
-                                <li><a class="dropdown-item" href="reporte_stock_productos.php?e=<?php echo $estado ?>&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
-                                <?php
-                                $proveedores_total_pages = $Proveedores->getTotalItemsProveedores('ACTIVO');
-                                $proveedores_result = $Proveedores->getProveedores('ACTIVO', 1, $proveedores_total_pages);
-                                while ($row = $proveedores_result->fetch_assoc()) {
-                                ?>
-                                    <li><a class="dropdown-item" href="reporte_stock_productos.php?e=<?php echo $estado ?>&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&prov=<?php echo $row['id_proveedor']; ?>"><?php echo $row['nombre']; ?></a></li>
-                                <?php } ?>
-                            </ul>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="btn-group">
-                            <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                Estado
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
-                                <li><a class="dropdown-item" href="reporte_stock_productos.php?e=TODO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&prov=<?php echo $id_proveedor; ?>">TODO</a></li>
-                                <li><a class="dropdown-item" href="reporte_stock_productos.php?e=ACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&prov=<?php echo $id_proveedor; ?>">ACTIVO</a></li>
-                                <li><a class="dropdown-item" href="reporte_stock_productos.php?e=INACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&prov=<?php echo $id_proveedor; ?>">INACTIVO</a></li>
-                            </ul>
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($producto = $result->fetch_assoc()): ?>
-                    <tr <?php if ($producto['stock'] < 5): echo 'class="table-danger"';
-                        endif; ?>>
-                        <td><?php echo $producto['descripcion']; ?></td>
-                        <td><?php echo $producto['stock']; ?></td>
-                        <td>
-                            <?php
-                            $rows = $Proveedores->getProveedor($producto['id_proveedor']);
-                            if ($rows->num_rows > 0) {
-                                $row = $rows->fetch_assoc();
-                                echo $row['nombre'];
-                            }
-                            ?>
-                        </td>
-                        <td><?php echo $producto['estado']; ?></td>
+        <!-- Tabla de clientes responsive -->
+        <div class="table-responsive">
+            <!-- Tabla de clientes -->
+            <table class="table table-bordered table-striped caption-top">
+                <caption>
+                    <div class="btn-group">
+                        <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                            Lista de <?php echo $num_results_on_page ?> Registros de <?php echo $total_pages ?>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
+                            <li><a class="dropdown-item" href="reporte_stock_productos.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                            endif; ?>pn=<?php echo $page ?>&nrop=5&prov=<?php echo $id_proveedor; ?>">5</a></li>
+                            <li><a class="dropdown-item" href="reporte_stock_productos.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                            endif; ?>pn=<?php echo $page ?>&nrop=10&prov=<?php echo $id_proveedor; ?>">10</a></li>
+                            <li><a class="dropdown-item" href="reporte_stock_productos.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                            endif; ?>pn=<?php echo $page ?>&nrop=15&prov=<?php echo $id_proveedor; ?>">15</a></li>
+                        </ul>
+                    </div>
+                </caption>
+                <thead class="table-principal">
+                    <tr>
+                        <th>
+                            <div class="btn-group">
+                                <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="DescripcionDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    Descripcion
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="DescripcionDropdown">
+                                    <li><a class="dropdown-item" href="reporte_stock_productos.php?e=<?php echo $estado ?>&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
+                                    <?php
+                                    $productos_total_pages = $Productos->getTotalItemsProductos('ACTIVO');
+                                    $productos_result = $Productos->getProductos('ACTIVO', 1, $productos_total_pages);
+                                    while ($row = $productos_result->fetch_assoc()) {
+                                    ?>
+                                        <li><a class="dropdown-item" href="reporte_stock_productos.php?e=<?php echo $estado ?>&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&prov=<?php echo $id_proveedor; ?>&id_producto=<?php echo $row['id_producto']; ?>"><?php echo $row['descripcion']; ?></a></li>
+                                    <?php } ?>
+                                </ul>
+                            </div>
+                        </th>
+                        <th>Stock</th>
+                        <th>
+                            <div class="btn-group">
+                                <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="ProveedorDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    Proveedor
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="ProveedorDropdown">
+                                    <li><a class="dropdown-item" href="reporte_stock_productos.php?e=<?php echo $estado ?>&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
+                                    <?php
+                                    $proveedores_total_pages = $Proveedores->getTotalItemsProveedores('ACTIVO');
+                                    $proveedores_result = $Proveedores->getProveedores('ACTIVO', 1, $proveedores_total_pages);
+                                    while ($row = $proveedores_result->fetch_assoc()) {
+                                    ?>
+                                        <li><a class="dropdown-item" href="reporte_stock_productos.php?e=<?php echo $estado ?>&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&prov=<?php echo $row['id_proveedor']; ?>"><?php echo $row['nombre']; ?></a></li>
+                                    <?php } ?>
+                                </ul>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="btn-group">
+                                <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    Estado
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
+                                    <li><a class="dropdown-item" href="reporte_stock_productos.php?e=TODO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&prov=<?php echo $id_proveedor; ?>">TODO</a></li>
+                                    <li><a class="dropdown-item" href="reporte_stock_productos.php?e=ACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&prov=<?php echo $id_proveedor; ?>">ACTIVO</a></li>
+                                    <li><a class="dropdown-item" href="reporte_stock_productos.php?e=INACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&prov=<?php echo $id_proveedor; ?>">INACTIVO</a></li>
+                                </ul>
+                            </div>
+                        </th>
                     </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php while ($producto = $result->fetch_assoc()): ?>
+                        <tr <?php if ($producto['stock'] < 5): echo 'class="table-danger"';
+                            endif; ?>>
+                            <td><?php echo $producto['descripcion']; ?></td>
+                            <td><?php echo $producto['stock']; ?></td>
+                            <td>
+                                <?php
+                                $rows = $Proveedores->getProveedor($producto['id_proveedor']);
+                                if ($rows->num_rows > 0) {
+                                    $row = $rows->fetch_assoc();
+                                    echo $row['nombre'];
+                                }
+                                ?>
+                            </td>
+                            <td><?php echo $producto['estado']; ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
         <?php if (ceil($total_pages / $num_results_on_page) > 0): ?>
             <nav aria-label="Navegación de la página" class="py-1">
                 <ul class="pagination pagination-sm justify-content-center">

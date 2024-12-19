@@ -20,7 +20,7 @@ $Ventanas = new Ventanas();
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav me-auto">
                 <?php
                 $GruposVentanas = $Ventanas->getGruposVentanasPorRol($id_rol);
                 while ($grupoVentana = $GruposVentanas->fetch_assoc()) {
@@ -40,8 +40,8 @@ $Ventanas = new Ventanas();
                     </li>
                 <?php } ?>
             </ul>
+            <!-- Enlace para desloguearse -->
+            <a class="nav-item nav-link btn btn-outline-danger d-flex text-danger ps-0" style="border: none;" tabindex="-1" href="logout.php">Cerrar sesión</a>
         </div>
-        <!-- Enlace para desloguearse -->
-        <a class="nav-item nav-link btn btn-outline-danger" style="color: #FFFFFF; background-color: #D9534F; border: none;" tabindex="-1" href="logout.php">Cerrar sesión</a>
     </div>
 </nav>

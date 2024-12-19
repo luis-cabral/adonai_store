@@ -90,84 +90,95 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         <h2>Gestión de Productos</h2>
         <?php if ($_SESSION['usuario']["rol"] == 1 || $_SESSION['usuario']["rol"] == 3): ?><a href="#" class="btn btn-principal mb-3" data-bs-toggle="modal" data-bs-target="#addProductoModal">Agregar Producto</a><?php endif; ?>
 
-        <!-- Tabla de productos -->
-        <table class="table table-striped table-responsive caption-top mb-3">
-            <caption>
-                <div class="btn-group">
-                    <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                        Lista de <?php echo $num_results_on_page ?> Registros de <?php echo $total_pages ?>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
-                        <li><a class="dropdown-item" href="gestion_productos.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=5">5</a></li>
-                        <li><a class="dropdown-item" href="gestion_productos.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=10">10</a></li>
-                        <li><a class="dropdown-item" href="gestion_productos.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=15">15</a></li>
-                    </ul>
-                </div>
-            </caption>
-            <thead class="table-principal">
-                <tr>
-                    <th class="text-center">Descripcion</th>
-                    <th class="text-center">Stock</th>
-                    <th class="text-center">Proveedor</th>
-                    <th class="text-center">
-                        <div class="btn-group">
-                            <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                Estado
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
-                                <li><a class="dropdown-item" href="gestion_productos.php?e=TODO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
-                                <li><a class="dropdown-item" href="gestion_productos.php?e=ACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">ACTIVO</a></li>
-                                <li><a class="dropdown-item" href="gestion_productos.php?e=INACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">INACTIVO</a></li>
-                            </ul>
-                        </div>
-                    </th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($producto = $result->fetch_assoc()): ?>
-                    <tr <?php if ($producto['stock'] < 5): echo 'class="table-danger"';
-                        endif; ?>>
-                        <td><?php echo $producto['descripcion']; ?></td>
-                        <td class="text-center"><?php echo $producto['stock']; ?></td>
-                        <td>
-                            <?php if ($_SESSION['usuario']["rol"] == 1 || $_SESSION['usuario']["rol"] == 3): ?><a href="gestion_proveedores.php?id_proveedor=<?php echo $producto['id_proveedor'] ?>" class="btn btn-link btn-sm"><?php endif; ?>
-                                <?php
-                                $rows = $Proveedores->getProveedor($producto['id_proveedor']);
-                                if ($rows->num_rows > 0) {
-                                    $row = $rows->fetch_assoc();
-                                    echo $row['nombre'];
-                                }
-                                ?>
-                                <?php if ($_SESSION['usuario']["rol"] == 1 || $_SESSION['usuario']["rol"] == 3): ?></a><?php endif; ?>
-                        </td>
-                        <td><?php echo $producto['estado']; ?></td>
-                        <td class="text-center">
-                            <?php if ($_SESSION['usuario']["rol"] == 1 || $_SESSION['usuario']["rol"] == 2): ?>
-                                <a href="#" class="btn btn-success btn-sm <?php if ($producto['stock'] <= 0): echo 'disabled';
-                                                                            endif; ?>" data-bs-toggle="modal" data-bs-target="#addVentaModal" onclick="loadDataVentaModal(<?php echo htmlspecialchars(json_encode($producto)); ?>)" <?php if ($producto['stock'] <= 0): echo ' tabindex="-1" aria-disabled="true"';
-                                                                                                                                                                                                                                    endif; ?>>Vender</a>
-                            <?php endif; ?>
-
-                            <?php if ($_SESSION['usuario']["rol"] == 1 || $_SESSION['usuario']["rol"] == 3): ?>
-                                <div class="btn-group" role="group">
-                                    <button id="btnGroupAcciones<?php echo $producto['id_proveedor'] ?>" type="button" class="btn btn-sm btn-principal dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Acciones
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="btnGroupAcciones<?php echo $producto['id_proveedor'] ?>">
-                                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updProductoModal" onclick="loadData(<?php echo htmlspecialchars(json_encode($producto)); ?>)">Editar Producto</a></li>
-                                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addCompraModal" onclick="loadDataCompraModal(<?php echo htmlspecialchars(json_encode($producto)); ?>)">Registrar Compra</a></li>
-                                    </ul>
-                                </div>
-                            <?php endif; ?>
-                        </td>
+        <!-- Tabla de clientes responsive -->
+        <div class="table-responsive">
+            <!-- Tabla de clientes -->
+            <table class="table table-bordered table-striped caption-top">
+                <caption>
+                    <div class="btn-group">
+                        <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                            Lista de <?php echo $num_results_on_page ?> Registros de <?php echo $total_pages ?>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
+                            <li><a class="dropdown-item" href="gestion_productos.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=5">5</a></li>
+                            <li><a class="dropdown-item" href="gestion_productos.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=10">10</a></li>
+                            <li><a class="dropdown-item" href="gestion_productos.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=15">15</a></li>
+                        </ul>
+                    </div>
+                </caption>
+                <thead class="table-principal">
+                    <tr>
+                        <th class="text-center">Descripcion</th>
+                        <th class="text-center">Stock</th>
+                        <th class="text-center">Proveedor</th>
+                        <th class="text-center">
+                            <div class="btn-group">
+                                <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    Estado
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
+                                    <li><a class="dropdown-item" href="gestion_productos.php?e=TODO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
+                                    <li><a class="dropdown-item" href="gestion_productos.php?e=ACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">ACTIVO</a></li>
+                                    <li><a class="dropdown-item" href="gestion_productos.php?e=INACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">INACTIVO</a></li>
+                                </ul>
+                            </div>
+                        </th>
+                        <th class="text-center">Acciones</th>
                     </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php
+                    while ($producto = $result->fetch_assoc()):
+                        $rows_comp = $Compras->getPreciosComprasPorProducto($producto['id_producto']);
+                        if ($rows_comp->num_rows > 0) {
+                            $row_comp = $rows_comp->fetch_assoc();
+                            $producto['min_precio_compra_x_unidad'] = $row_comp['min_precio_compra_x_unidad'];
+                            $producto['max_precio_compra_x_unidad'] = $row_comp['max_precio_compra_x_unidad'];
+                        }
+                    ?>
+                        <tr <?php if ($producto['stock'] < 5): echo 'class="table-danger"';
+                            endif; ?>>
+                            <td><?php echo $producto['descripcion']; ?></td>
+                            <td class="text-center"><?php echo $producto['stock']; ?></td>
+                            <td>
+                                <?php if ($_SESSION['usuario']["rol"] == 1 || $_SESSION['usuario']["rol"] == 3): ?><a href="gestion_proveedores.php?id_proveedor=<?php echo $producto['id_proveedor'] ?>" class="btn btn-link btn-sm"><?php endif; ?>
+                                    <?php
+                                    $rows = $Proveedores->getProveedor($producto['id_proveedor']);
+                                    if ($rows->num_rows > 0) {
+                                        $row = $rows->fetch_assoc();
+                                        echo $row['nombre'];
+                                    }
+                                    ?>
+                                    <?php if ($_SESSION['usuario']["rol"] == 1 || $_SESSION['usuario']["rol"] == 3): ?></a><?php endif; ?>
+                            </td>
+                            <td><?php echo $producto['estado']; ?></td>
+                            <td class="text-center">
+                                <?php if ($_SESSION['usuario']["rol"] == 1 || $_SESSION['usuario']["rol"] == 2): ?>
+                                    <a href="#" class="btn btn-success btn-sm <?php if ($producto['stock'] <= 0): echo 'disabled';
+                                                                                endif; ?>" data-bs-toggle="modal" data-bs-target="#addVentaModal" onclick="loadDataVentaModal(<?php echo htmlspecialchars(json_encode($producto)); ?>)" <?php if ($producto['stock'] <= 0): echo ' tabindex="-1" aria-disabled="true"';
+                                                                                                                                                                                                                                        endif; ?>>Vender</a>
+                                <?php endif; ?>
+
+                                <?php if ($_SESSION['usuario']["rol"] == 1 || $_SESSION['usuario']["rol"] == 3): ?>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupAcciones<?php echo $producto['id_proveedor'] ?>" type="button" class="btn btn-sm btn-principal dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Acciones
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="btnGroupAcciones<?php echo $producto['id_proveedor'] ?>">
+                                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updProductoModal" onclick="loadData(<?php echo htmlspecialchars(json_encode($producto)); ?>)">Editar Producto</a></li>
+                                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addCompraModal" onclick="loadDataCompraModal(<?php echo htmlspecialchars(json_encode($producto)); ?>)">Registrar Compra</a></li>
+                                        </ul>
+                                    </div>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
         <?php if (ceil($total_pages / $num_results_on_page) > 0): ?>
             <nav aria-label="Navegación de la página" class="py-1">
                 <ul class="pagination pagination-sm justify-content-center">
@@ -248,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="productos-add-form" action="gestion_productos.php" method="POST" class="row g-3">
+                    <form id="productos-add-form" action="gestion_productos.php" method="POST" class="row g-3 was-validated">
                         <div class="col-md-6">
                             <label for="descripcion" class="form-label">Descripcion</label>
                             <input type="text" class="form-control" id="descripcion" name="descripcion" required>
@@ -256,6 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                         <div class="col-md-6">
                             <label for="id_proveedor" class="form-label">Proveedor</label>
                             <select class="form-select" id="id_proveedor" name="id_proveedor" required>
+                                <option selected value="">Seleccionar</option>
                                 <?php
                                 $proveedores_total_pages = $Proveedores->getTotalItemsProveedores('ACTIVO');
                                 $proveedores_result = $Proveedores->getProveedores('ACTIVO', 1, $proveedores_total_pages);
@@ -281,7 +293,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="producto-edit-form" action="gestion_productos.php" method="POST" class="row g-3">
+                    <form id="producto-edit-form" action="gestion_productos.php" method="POST" class="row g-3 was-validated">
                         <input type="hidden" name="id_producto" id="id_producto">
                         <div class="col-md-12">
                             <label for="descripcion" class="form-label">Descripcion</label>
@@ -322,7 +334,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="add-compra-modal-form" action="gestion_productos.php" method="POST" class="row g-3">
+                    <form id="add-compra-modal-form" action="gestion_productos.php" method="POST" class="row g-3 was-validated">
                         <input type="hidden" name="CompraModal" id="CompraModal">
                         <input type="hidden" name="id_empleado" id="id_empleado" value="<?php echo $_SESSION['usuario']["id_empleado"]; ?>">
                         <div class="col-md-3">
@@ -335,11 +347,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                         </div>
                         <div class="col-md-6">
                             <label for="precio_compra_x_unidad" class="form-label">Precio Compra X Unidad</label>
-                            <input type="number" class="form-control" id="precio_compra_x_unidad" name="precio_compra_x_unidad" required>
+                            <input type="number" class="form-control" id="precio_compra_x_unidad" name="precio_compra_x_unidad" required min="5000">
+                            <div class="invalid-feedback" id="precio_venta_x_unidad-invalid-feedback">
+                                Por favor, ingrese un precio válido mayor a 5.000.
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="cantidad" class="form-label">Cantidad</label>
-                            <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+                            <input type="number" class="form-control" id="cantidad" name="cantidad" required min="1">
+                            <div class="invalid-feedback" id="precio_venta_x_unidad-invalid-feedback">
+                                Por favor, ingrese una cantidad válida mayor a 1.
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-principal">Guardar</button>
                     </form>
@@ -359,7 +377,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 <div class="modal-body">
                     <?php
                     ?>
-                    <form id="add-venta-modal-form" action="gestion_productos.php" method="POST" class="row g-3">
+                    <form id="add-venta-modal-form" action="gestion_productos.php" method="POST" class="row g-3 was-validated">
                         <input type="hidden" name="VentaModal" id="VentaModal">
                         <input type="hidden" name="id_empleado" id="id_empleado" value="<?php echo $_SESSION['usuario']["id_empleado"]; ?>">
                         <input type="hidden" name="id_punto_venta" id="id_punto_venta" value="<?php echo $_SESSION['usuario']["id_punto_venta"]; ?>">
@@ -374,10 +392,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                         <div class="col-md-6">
                             <label for="precio_venta_x_unidad" class="form-label">Precio Venta X Unidad</label>
                             <input type="number" class="form-control" id="precio_venta_x_unidad" name="precio_venta_x_unidad" required>
+                            <div class="invalid-feedback" id="precio_venta_x_unidad-invalid-feedback">
+                                Por favor, ingrese un precio válido.
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="cantidad" class="form-label">Cantidad</label>
                             <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+                            <div class="invalid-feedback" id="cantidad-invalid-feedback">
+                                Por favor, ingrese una cantidad válida.
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <button type="button" id="nuevoClienteButton" class="btn btn-secondary" onclick="nuevoClienteBandera(true)">Nuevo Cliente</button>
@@ -438,15 +462,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 <script>
     function loadData(producto) {
+        console.log(producto);
         let productoForm = document.getElementById("producto-edit-form");
         productoForm.querySelector('#id_producto').value = producto.id_producto;
-        productoForm.querySelector('#nombre').value = producto.nombre;
         productoForm.querySelector('#descripcion').value = producto.descripcion;
-        productoForm.querySelector('#categoria').value = producto.categoria;
-        productoForm.querySelector('#talla').value = producto.talla;
-        productoForm.querySelector('#color').value = producto.color;
-        productoForm.querySelector('#precio_compra').value = producto.precio_compra;
-        productoForm.querySelector('#precio_venta').value = producto.precio_venta;
         productoForm.querySelector('#stock').value = producto.stock;
         productoForm.querySelector('#estado').value = producto.estado;
     };
@@ -461,7 +480,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         let productoForm = document.getElementById("add-venta-modal-form");
         productoForm.querySelector('#id_producto').value = producto.id_producto;
         productoForm.querySelector('#descripcion').value = producto.descripcion;
+        productoForm.querySelector('#cantidad').setAttribute("min", 1);
         productoForm.querySelector('#cantidad').setAttribute("max", producto.stock);
+        productoForm.querySelector('#cantidad-invalid-feedback').innerHTML = "Por favor, ingrese una cantidad válida entre 1 y " + producto.stock + ".";
+        let min_precio_compra_x_unidad = producto.min_precio_compra_x_unidad;
+        let max_precio_compra_x_unidad = (producto.max_precio_compra_x_unidad * 2);
+        productoForm.querySelector('#precio_venta_x_unidad').setAttribute("min", min_precio_compra_x_unidad);
+        productoForm.querySelector('#precio_venta_x_unidad').setAttribute("max", max_precio_compra_x_unidad);
+        min_precio_compra_x_unidad = new Intl.NumberFormat('de-DE').format(
+            min_precio_compra_x_unidad,
+        );
+        max_precio_compra_x_unidad = new Intl.NumberFormat('de-DE').format(
+            max_precio_compra_x_unidad,
+        );
+        productoForm.querySelector('#precio_venta_x_unidad-invalid-feedback').innerHTML = "Por favor, ingrese un precio válido entre " + min_precio_compra_x_unidad + " y " + max_precio_compra_x_unidad + ".";
+        //
+        let atrasNuevoClienteButton = document.getElementById("atrasNuevoClienteButton");
+        let nuevoClienteButton = document.getElementById("nuevoClienteButton");
+        let dropDownCliente = document.getElementById("dropDownCliente");
+        let NuevoClienteCliente = document.getElementById("NuevoClienteCliente");
+        let addVentaModalContent = document.getElementById("addVentaModalContent");
+        //
+        let id_cliente = document.getElementById("id_cliente");
+        let add_cliente = document.getElementById("add_cliente");
+        let cedula = document.getElementById("cedula");
+        let ruc = document.getElementById("ruc");
+        let nombre = document.getElementById("nombre");
+        let apellido = document.getElementById("apellido");
+        let telefono = document.getElementById("telefono");
+        let direccion = document.getElementById("direccion");
+        //
+        atrasNuevoClienteButton.style.display = "none";
+        nuevoClienteButton.style.display = "block";
+        dropDownCliente.style.display = "block";
+        NuevoClienteCliente.style.display = "none";
+        addVentaModalContent.classList.remove("modal-xl");
+        //
+        id_cliente.setAttribute("required", true);
+        id_cliente.setAttribute("name", "id_cliente");
+        add_cliente.removeAttribute("name");
+        cedula.removeAttribute("required");
+        cedula.removeAttribute("name");
+        cedula.value = null;
+        ruc.value = null;
+        ruc.removeAttribute("name");
+        nombre.removeAttribute("required");
+        nombre.removeAttribute("name");
+        nombre.value = null;
+        apellido.removeAttribute("required");
+        apellido.removeAttribute("name");
+        apellido.value = null;
+        telefono.removeAttribute("required");
+        telefono.removeAttribute("name");
+        telefono.value = null;
+        direccion.removeAttribute("required");
+        direccion.removeAttribute("name");
+        direccion.value = null;
     };
     //
     function nuevoClienteBandera(mostrar) {

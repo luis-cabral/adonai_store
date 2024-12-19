@@ -73,91 +73,94 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         <a href="#" class="btn btn-principal mb-3" data-bs-toggle="modal" data-bs-target="#addRolModal">Agregar Rol</a>
         <a href="#" class="btn btn-principal mb-3" data-bs-toggle="modal" data-bs-target="#addRolVentanaModal">Agregar Rol de Ventanas</a>
 
-        <!-- Tabla de Rol de Ventanas -->
-        <table class="table table-striped table-responsive caption-top">
-            <caption>
-                <div class="btn-group">
-                    <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                        Lista de <?php echo $num_results_on_page ?> Registros de <?php echo $total_pages ?>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
-                        <li><a class="dropdown-item" href="gestion_rolventanas.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=5&irol=<?php echo $irol; ?>">5</a></li>
-                        <li><a class="dropdown-item" href="gestion_rolventanas.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=10&irol=<?php echo $irol; ?>">10</a></li>
-                        <li><a class="dropdown-item" href="gestion_rolventanas.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=15&irol=<?php echo $irol; ?>">15</a></li>
-                    </ul>
-                </div>
-            </caption>
-            <thead class="table-principal">
-                <tr>
-                    <th>Ventana</th>
-                    <th>
-                        <div class="btn-group">
-                            <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="RolDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                Rol
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="RolDropdown">
-                                <li><a class="dropdown-item" href="gestion_rolventanas.php?e=<?php echo $estado ?>&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
-                                <?php
-                                $roles_total_pages = $Roles->getTotalItemsRoles('ACTIVO');
-                                $roles_result = $Roles->getRoles('ACTIVO', 1, $roles_total_pages);
-                                while ($row = $roles_result->fetch_assoc()) {
-                                ?>
-                                    <li><a class="dropdown-item" href="gestion_rolventanas.php?e=<?php echo $estado ?>&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&irol=<?php echo $row['id_rol']; ?>"><?php echo $row['nombre']; ?></a></li>
-                                <?php } ?>
-                            </ul>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="btn-group">
-                            <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                Estado
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
-                                <li><a class="dropdown-item" href="gestion_rolventanas.php?pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&irol=<?php echo $irol; ?>">TODO</a></li>
-                                <li><a class="dropdown-item" href="gestion_rolventanas.php?e=ACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&irol=<?php echo $irol; ?>">ACTIVO</a></li>
-                                <li><a class="dropdown-item" href="gestion_rolventanas.php?e=INACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&irol=<?php echo $irol; ?>">INACTIVO</a></li>
-                            </ul>
-                        </div>
-                    </th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($rolventana = $result->fetch_assoc()): ?>
+        <!-- Tabla de clientes responsive -->
+        <div class="table-responsive">
+            <!-- Tabla de clientes -->
+            <table class="table table-bordered table-striped caption-top">
+                <caption>
+                    <div class="btn-group">
+                        <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                            Lista de <?php echo $num_results_on_page ?> Registros de <?php echo $total_pages ?>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
+                            <li><a class="dropdown-item" href="gestion_rolventanas.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=5&irol=<?php echo $irol; ?>">5</a></li>
+                            <li><a class="dropdown-item" href="gestion_rolventanas.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=10&irol=<?php echo $irol; ?>">10</a></li>
+                            <li><a class="dropdown-item" href="gestion_rolventanas.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=15&irol=<?php echo $irol; ?>">15</a></li>
+                        </ul>
+                    </div>
+                </caption>
+                <thead class="table-principal">
                     <tr>
-                        <td>
-                            <?php
-                            $ventanas = $Ventanas->getVentana($rolventana['id_ventana']);
-                            if ($ventanas->num_rows > 0) {
-                                $row_v = $ventanas->fetch_assoc();
-                                $descripcion = $row_v['descripcion'];
-                                $grupo = $row_v['grupo'];
-                                $rolventana['descripcion'] = $descripcion;
-                                $rolventana['grupo'] = $grupo;
-                                echo "$grupo -> $descripcion";
-                            }
-                            ?>
-                        </td>
-                        <td>
-                            <?php
-                            $roles = $Roles->getRol($rolventana['id_rol']);
-                            if ($roles->num_rows > 0) {
-                                $rol = $roles->fetch_assoc();
-                                echo $rol['nombre'];
-                            }
-                            ?>
-                        </td>
-                        <td><?php echo $rolventana['estado']; ?></td>
-                        <td>
-                            <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updRolVentanaModal" onclick="loadData(<?php echo htmlspecialchars(json_encode($rolventana)); ?>)">Editar</a>
-                        </td>
+                        <th>Ventana</th>
+                        <th>
+                            <div class="btn-group">
+                                <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="RolDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    Rol
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="RolDropdown">
+                                    <li><a class="dropdown-item" href="gestion_rolventanas.php?e=<?php echo $estado ?>&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
+                                    <?php
+                                    $roles_total_pages = $Roles->getTotalItemsRoles('ACTIVO');
+                                    $roles_result = $Roles->getRoles('ACTIVO', 1, $roles_total_pages);
+                                    while ($row = $roles_result->fetch_assoc()) {
+                                    ?>
+                                        <li><a class="dropdown-item" href="gestion_rolventanas.php?e=<?php echo $estado ?>&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&irol=<?php echo $row['id_rol']; ?>"><?php echo $row['nombre']; ?></a></li>
+                                    <?php } ?>
+                                </ul>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="btn-group">
+                                <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    Estado
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
+                                    <li><a class="dropdown-item" href="gestion_rolventanas.php?pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&irol=<?php echo $irol; ?>">TODO</a></li>
+                                    <li><a class="dropdown-item" href="gestion_rolventanas.php?e=ACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&irol=<?php echo $irol; ?>">ACTIVO</a></li>
+                                    <li><a class="dropdown-item" href="gestion_rolventanas.php?e=INACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>&irol=<?php echo $irol; ?>">INACTIVO</a></li>
+                                </ul>
+                            </div>
+                        </th>
+                        <th>Acciones</th>
                     </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php while ($rolventana = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td>
+                                <?php
+                                $ventanas = $Ventanas->getVentana($rolventana['id_ventana']);
+                                if ($ventanas->num_rows > 0) {
+                                    $row_v = $ventanas->fetch_assoc();
+                                    $descripcion = $row_v['descripcion'];
+                                    $grupo = $row_v['grupo'];
+                                    $rolventana['descripcion'] = $descripcion;
+                                    $rolventana['grupo'] = $grupo;
+                                    echo "$grupo -> $descripcion";
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <?php
+                                $roles = $Roles->getRol($rolventana['id_rol']);
+                                if ($roles->num_rows > 0) {
+                                    $rol = $roles->fetch_assoc();
+                                    echo $rol['nombre'];
+                                }
+                                ?>
+                            </td>
+                            <td><?php echo $rolventana['estado']; ?></td>
+                            <td>
+                                <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updRolVentanaModal" onclick="loadData(<?php echo htmlspecialchars(json_encode($rolventana)); ?>)">Editar</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
         <?php if (ceil($total_pages / $num_results_on_page) > 0): ?>
             <nav aria-label="Navegación de la página" class="py-1">
                 <ul class="pagination pagination-sm justify-content-center">
@@ -238,11 +241,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="gestion_RolVentanas.php" method="POST">
+                    <form action="gestion_RolVentanas.php" method="POST" class="row g-3 was-validated">
                         <input type="text" class="form-control" id="_method" name="_method" value="ADD" hidden>
-                        <div class="mb-3">
+                        <div class="col-md-12">
                             <label for="id_ventana" class="form-label">Ventana</label>
                             <select class="form-select" id="id_ventana" name="id_ventana" value="" required>
+                                <option selected value="">Seleccionar</option>
                                 <?php
                                 $ventanas_total_pages = $Ventanas->getTotalItemsVentanas('ACTIVO');
                                 $ventanas_result = $Ventanas->getVentanas('ACTIVO', 1, $ventanas_total_pages);
@@ -252,9 +256,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                                 <?php } ?>
                             </select>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-md-12">
                             <label for="id_rol" class="form-label">Rol</label>
                             <select class="form-select" id="id_rol" name="id_rol" required>
+                                <option selected value="">Seleccionar</option>
                                 <?php
                                 $roles_total_pages = $Roles->getTotalItemsRoles('ACTIVO');
                                 $roles_result = $Roles->getRoles('ACTIVO', 1, $roles_total_pages);
@@ -280,13 +285,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="gestion_RolVentanas.php" method="POST">
+                    <form action="gestion_RolVentanas.php" method="POST" class="row g-3 was-validated">
                         <input type="text" class="form-control" id="_method" name="_method" value="ADD_ROL" hidden>
-                        <div class="mb-3">
+                        <div class="col-md-12">
                             <label for="nombre" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-md-12">
                             <label for="descripcion" class="form-label">Descripcion</label>
                             <input type="text" class="form-control" id="descripcion" name="descripcion" required>
                         </div>
@@ -306,15 +311,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="rolVentana-edit-form" action="gestion_RolVentanas.php" method="POST">
+                    <form id="rolVentana-edit-form" action="gestion_RolVentanas.php" method="POST" class="row g-3 was-validated">
                         <input type="text" class="form-control" id="_method" name="_method" value="UPD" hidden>
                         <input type="text" class="form-control" id="id_rol" name="id_rol" hidden>
-                        <div class="mb-3">
+                        <div class="col-md-6">
                             <label for="id_ventana" class="form-label">Ventana</label>
                             <input type="text" class="form-control" id="id_ventana" name="id_ventana" hidden>
                             <input type="text" class="form-control" id="descripcion" name="descripcion" readonly>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-md-6">
                             <label for="id_rol_" class="form-label">Rol</label>
                             <select class="form-select" id="id_rol_" name="id_rol_" disabled>
                                 <?php
@@ -326,7 +331,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                                 <?php } ?>
                             </select>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-md-6">
                             <label for="estado" class="form-label">Estado</label>
                             <select class="form-select" id="estado" name="estado" required>
                                 <option value="ACTIVO">Activo</option>

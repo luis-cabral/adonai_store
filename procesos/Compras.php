@@ -94,6 +94,19 @@ class Compras
         return $result;
     }
 
+    public function getPreciosComprasPorProducto($id_producto)
+    {
+        $conn = $this->dbConnect;
+        // Función para obtener compras
+        $sql = "SELECT min(precio_compra_x_unidad) min_precio_compra_x_unidad, max(precio_compra_x_unidad) max_precio_compra_x_unidad FROM compras where id_producto = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id_producto);
+        $result = $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
     public function getNextIdCompra()
     {
         $next_id_compra = 1;

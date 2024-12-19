@@ -64,63 +64,66 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         <h2>Gestión de Clientes</h2>
         <a href="#" class="btn btn-principal mb-3" data-bs-toggle="modal" data-bs-target="#addClienteModal">Agregar Cliente</a>
 
-        <!-- Tabla de clientes -->
-        <table class="table table-striped table-responsive caption-top">
-            <caption>
-                <div class="btn-group">
-                    <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                        Lista de <?php echo $num_results_on_page ?> Registros de <?php echo $total_pages ?>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
-                        <li><a class="dropdown-item" href="gestion_clientes.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                endif; ?>pn=<?php echo $page ?>&nrop=5">5</a></li>
-                        <li><a class="dropdown-item" href="gestion_clientes.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                endif; ?>pn=<?php echo $page ?>&nrop=10">10</a></li>
-                        <li><a class="dropdown-item" href="gestion_clientes.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                endif; ?>pn=<?php echo $page ?>&nrop=15">15</a></li>
-                    </ul>
-                </div>
-            </caption>
-            <thead class="table-principal">
-                <tr>
-                    <th>Cedula</th>
-                    <th>RUC</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Telefono</th>
-                    <th>Direccion</th>
-                    <th>
-                        <div class="btn-group">
-                            <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                Estado
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
-                                <li><a class="dropdown-item" href="gestion_clientes.php?e=TODO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
-                                <li><a class="dropdown-item" href="gestion_clientes.php?e=ACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">ACTIVO</a></li>
-                                <li><a class="dropdown-item" href="gestion_clientes.php?e=INACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">INACTIVO</a></li>
-                            </ul>
-                        </div>
-                    </th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($cliente = $result->fetch_assoc()): ?>
+        <!-- Tabla de clientes responsive -->
+        <div class="table-responsive">
+            <!-- Tabla de clientes -->
+            <table class="table table-bordered table-striped caption-top">
+                <caption>
+                    <div class="btn-group">
+                        <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                            Lista de <?php echo $num_results_on_page ?> Registros de <?php echo $total_pages ?>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
+                            <li><a class="dropdown-item" href="gestion_clientes.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=5">5</a></li>
+                            <li><a class="dropdown-item" href="gestion_clientes.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=10">10</a></li>
+                            <li><a class="dropdown-item" href="gestion_clientes.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=15">15</a></li>
+                        </ul>
+                    </div>
+                </caption>
+                <thead class="table-principal">
                     <tr>
-                        <td><?php echo $cliente['cedula']; ?></td>
-                        <td><?php echo $cliente['ruc']; ?></td>
-                        <td><?php echo $cliente['nombre']; ?></td>
-                        <td><?php echo $cliente['apellido']; ?></td>
-                        <td><?php echo $cliente['direccion']; ?></td>
-                        <td><?php echo $cliente['telefono']; ?></td>
-                        <td><?php echo $cliente['estado']; ?></td>
-                        <td>
-                            <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updClienteModal" onclick="loadData(<?php echo htmlspecialchars(json_encode($cliente)); ?>)">Editar</a>
-                        </td>
+                        <th>Cedula</th>
+                        <th>RUC</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Telefono</th>
+                        <th>Direccion</th>
+                        <th>
+                            <div class="btn-group">
+                                <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    Estado
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
+                                    <li><a class="dropdown-item" href="gestion_clientes.php?e=TODO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
+                                    <li><a class="dropdown-item" href="gestion_clientes.php?e=ACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">ACTIVO</a></li>
+                                    <li><a class="dropdown-item" href="gestion_clientes.php?e=INACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">INACTIVO</a></li>
+                                </ul>
+                            </div>
+                        </th>
+                        <th>Acciones</th>
                     </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php while ($cliente = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo $cliente['cedula']; ?></td>
+                            <td><?php echo $cliente['ruc']; ?></td>
+                            <td><?php echo $cliente['nombre']; ?></td>
+                            <td><?php echo $cliente['apellido']; ?></td>
+                            <td><?php echo $cliente['direccion']; ?></td>
+                            <td><?php echo $cliente['telefono']; ?></td>
+                            <td><?php echo $cliente['estado']; ?></td>
+                            <td>
+                                <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updClienteModal" onclick="loadData(<?php echo htmlspecialchars(json_encode($cliente)); ?>)">Editar</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
         <?php if (ceil($total_pages / $num_results_on_page) > 0): ?>
             <nav aria-label="Navegación de la página" class="py-1">
                 <ul class="pagination pagination-sm justify-content-center">
@@ -201,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="gestion_clientes.php" method="POST" class="row g-3">
+                    <form action="gestion_clientes.php" method="POST" class="row g-3 was-validated">
                         <div class="col-md-6">
                             <label for="cedula" class="form-label">Cedula</label>
                             <input type="text" class="form-control" id="cedula" name="cedula" required>
@@ -242,7 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="cliente-edit-form" action="gestion_clientes.php" method="POST" class="row g-3">
+                    <form id="cliente-edit-form" action="gestion_clientes.php" method="POST" class="row g-3 was-validated">
                         <input type="hidden" name="id_cliente" id="id_cliente">
                         <div class="col-md-6">
                             <label for="cedula" class="form-label">Cedula</label>

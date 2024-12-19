@@ -82,63 +82,66 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         <h2>Gestión de Empleados</h2>
         <a href="#" class="btn btn-principal mb-3" data-bs-toggle="modal" data-bs-target="#addEmpleadoModal">Agregar Empleado</a>
 
-        <!-- Tabla de empleados -->
-        <table class="table table-striped table-responsive caption-top">
-            <caption>
-                <div class="btn-group">
-                    <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                        Lista de <?php echo $num_results_on_page ?> Registros de <?php echo $total_pages ?>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
-                        <li><a class="dropdown-item" href="gestion_empleados.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=5">5</a></li>
-                        <li><a class="dropdown-item" href="gestion_empleados.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=10">10</a></li>
-                        <li><a class="dropdown-item" href="gestion_empleados.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=15">15</a></li>
-                    </ul>
-                </div>
-            </caption>
-            <thead class="table-principal">
-                <tr>
-                    <th>Punto Venta</th>
-                    <th>Cedula</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th>
-                        <div class="btn-group">
-                            <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                Estado
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
-                                <li><a class="dropdown-item" href="gestion_empleados.php?e=TODO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
-                                <li><a class="dropdown-item" href="gestion_empleados.php?e=ACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">ACTIVO</a></li>
-                                <li><a class="dropdown-item" href="gestion_empleados.php?e=INACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">INACTIVO</a></li>
-                            </ul>
-                        </div>
-                    </th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($empleado = $result->fetch_assoc()): ?>
+        <!-- Tabla de clientes responsive -->
+        <div class="table-responsive">
+            <!-- Tabla de clientes -->
+            <table class="table table-bordered table-striped caption-top">
+                <caption>
+                    <div class="btn-group">
+                        <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                            Lista de <?php echo $num_results_on_page ?> Registros de <?php echo $total_pages ?>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
+                            <li><a class="dropdown-item" href="gestion_empleados.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=5">5</a></li>
+                            <li><a class="dropdown-item" href="gestion_empleados.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=10">10</a></li>
+                            <li><a class="dropdown-item" href="gestion_empleados.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=15">15</a></li>
+                        </ul>
+                    </div>
+                </caption>
+                <thead class="table-principal">
                     <tr>
-                        <td><?php echo $empleado['id_punto_venta']; ?> - <?php echo $empleado['punto_venta_nombre']; ?></td>
-                        <td><?php echo $empleado['cedula']; ?></td>
-                        <td><?php echo $empleado['nombre']; ?></td>
-                        <td><?php echo $empleado['apellido']; ?></td>
-                        <td><?php echo $empleado['email']; ?></td>
-                        <td><?php echo $empleado['nombre_rol']; ?></td>
-                        <td><?php echo $empleado['estado']; ?></td>
-                        <td>
-                            <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updEmpleadoModal" onclick="loadData(<?php echo htmlspecialchars(json_encode($empleado)); ?>)">Editar</a>
-                        </td>
+                        <th>Punto Venta</th>
+                        <th>Cedula</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>
+                            <div class="btn-group">
+                                <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    Estado
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
+                                    <li><a class="dropdown-item" href="gestion_empleados.php?e=TODO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
+                                    <li><a class="dropdown-item" href="gestion_empleados.php?e=ACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">ACTIVO</a></li>
+                                    <li><a class="dropdown-item" href="gestion_empleados.php?e=INACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">INACTIVO</a></li>
+                                </ul>
+                            </div>
+                        </th>
+                        <th>Acciones</th>
                     </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php while ($empleado = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo $empleado['id_punto_venta']; ?> - <?php echo $empleado['punto_venta_nombre']; ?></td>
+                            <td><?php echo $empleado['cedula']; ?></td>
+                            <td><?php echo $empleado['nombre']; ?></td>
+                            <td><?php echo $empleado['apellido']; ?></td>
+                            <td><?php echo $empleado['email']; ?></td>
+                            <td><?php echo $empleado['nombre_rol']; ?></td>
+                            <td><?php echo $empleado['estado']; ?></td>
+                            <td>
+                                <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updEmpleadoModal" onclick="loadData(<?php echo htmlspecialchars(json_encode($empleado)); ?>)">Editar</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
         <?php if (ceil($total_pages / $num_results_on_page) > 0): ?>
             <nav aria-label="Navegación de la página" class="py-1">
                 <ul class="pagination pagination-sm justify-content-center">
@@ -219,18 +222,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="empleado-add-form" action="gestion_empleados.php" method="POST" class="row g-3">
-                        <div class="col-md-3">
-                            <label for="cedula" class="form-label">Cedula</label>
-                            <input type="text" class="form-control" id="cedula" name="cedula" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" class="form-control" id="apellido" name="apellido" required>
+                    <form id="empleado-add-form" action="gestion_empleados.php" method="POST" class="row g-3 was-validated">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="cedula" class="form-label">Cedula</label>
+                                    <input type="text" class="form-control" id="cedula" name="cedula" required>
+                                </div>
+                                <div class="col-md">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                </div>
+                                <div class="col-md">
+                                    <label for="apellido" class="form-label">Apellido</label>
+                                    <input type="text" class="form-control" id="apellido" name="apellido" required>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="email" class="form-label">Email</label>
@@ -243,6 +250,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                         <div class="col-md-6">
                             <label for="id_rol" class="form-label">Rol</label>
                             <select class="form-select" id="id_rol" name="id_rol" required>
+                                <option selected value="">Seleccionar</option>
                                 <?php
                                 $roles_total_pages = $Roles->getTotalItemsRoles('ACTIVO');
                                 $roles_result = $Roles->getRoles('ACTIVO', 1, $roles_total_pages);
@@ -255,6 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                         <div class="col-md-6">
                             <label for="id_punto_venta" class="form-label">Punto Venta</label>
                             <select class="form-select" id="id_punto_venta" name="id_punto_venta" required>
+                                <option selected value="">Seleccionar</option>
                                 <?php
                                 $puntos_venta_total_pages = $Puntos_venta->getTotalItemsPuntos_venta('ACTIVO');
                                 $puntos_venta_result = $Puntos_venta->getPuntos_venta('ACTIVO', 1, $puntos_venta_total_pages);
@@ -280,7 +289,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="empleado-edit-form" action="gestion_empleados.php" method="POST" class="row g-3">
+                    <form id="empleado-edit-form" action="gestion_empleados.php" method="POST" class="row g-3 was-validated">
                         <input type="hidden" name="id_empleado" id="id_empleado">
                         <div class="col-md-2 px-1">
                             <label for="cedula" class="form-label">Cedula</label>

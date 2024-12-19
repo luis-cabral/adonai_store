@@ -81,7 +81,7 @@ class Ventas
         return $result;
     }
 
-    public function getVentasXProductoXFecha($id_empleado = -1, $id_producto = -1)
+    public function getVentasXProductoXFecha($id_empleado = -1, $id_producto = -1, $fecha = "2000-01-01")
     {
         //
         $conn = $this->dbConnect;
@@ -97,12 +97,17 @@ class Ventas
         } else {
             $sql = "$sql and (vent.id_producto = ? or vent.id_producto = vent.id_producto) ";
         }
+        if ($fecha != "2000-01-01") {
+            $sql = "$sql and CAST(vent.fecha AS DATE) = ?";
+        } else {
+            $sql = "$sql and (CAST(vent.fecha AS DATE) = ? or CAST(vent.fecha AS DATE) = CAST(vent.fecha AS DATE)) ";
+        }
         $sql = "$sql group by vent.id_producto, prod.descripcion, vent.fecha ORDER BY vent.fecha, vent.id_producto";
         $stmt = $conn->prepare($sql);
         if (false === $stmt) {
             die('prepare() failed: ' . $conn->error);
         }
-        $result = $stmt->bind_param("ii", $id_empleado, $id_producto);
+        $result = $stmt->bind_param("iis", $id_empleado, $id_producto, $fecha);
         if (false === $result) {
             die('bind_param() failed' . $stmt->error);
         }
@@ -116,7 +121,7 @@ class Ventas
         return $result;
     }
 
-    public function getTotalItemsVentasReporteEmpleado($id_empleado = -1, $id_producto = -1, $id_cliente = -1)
+    public function getTotalItemsVentasReporteEmpleado($id_empleado = -1, $id_producto = -1, $id_cliente = -1, $fecha = "2000-01-01")
     {
         // Obtenga el número total de registros de nuestra tabla "ventas".
         $total_registros  = 1;
@@ -138,11 +143,16 @@ class Ventas
         } else {
             $sql = "$sql and (vent.id_cliente = ? or vent.id_cliente = vent.id_cliente) ";
         }
+        if ($fecha != "2000-01-01") {
+            $sql = "$sql and CAST(vent.fecha AS DATE) = ?";
+        } else {
+            $sql = "$sql and (CAST(vent.fecha AS DATE) = ? or CAST(vent.fecha AS DATE) = CAST(vent.fecha AS DATE)) ";
+        }
         $stmt = $conn->prepare($sql);
         if (false === $stmt) {
             die('prepare() failed: ' . $conn->error);
         }
-        $result = $stmt->bind_param("iii", $id_empleado, $id_producto, $id_cliente);
+        $result = $stmt->bind_param("iiis", $id_empleado, $id_producto, $id_cliente, $fecha);
         if (false === $result) {
             die('bind_param() failed' . $stmt->error);
         }
@@ -159,7 +169,7 @@ class Ventas
         return $total_registros;
     }
 
-    public function getVentasReporteEmpleado($id_empleado = -1, $id_producto = -1, $id_cliente = -1, $page = 1, $num_results_on_page = 5)
+    public function getVentasReporteEmpleado($id_empleado = -1, $id_producto = -1, $id_cliente = -1, $fecha = "2000-01-01", $page = 1, $num_results_on_page = 5)
     {
         // Calcule la página para obtener los resultados que necesitamos de nuestra tabla.
         $calc_page = ($page - 1) * $num_results_on_page;
@@ -182,12 +192,17 @@ class Ventas
         } else {
             $sql = "$sql and (vent.id_cliente = ? or vent.id_cliente = vent.id_cliente) ";
         }
+        if ($fecha != "2000-01-01") {
+            $sql = "$sql and CAST(vent.fecha AS DATE) = ?";
+        } else {
+            $sql = "$sql and (CAST(vent.fecha AS DATE) = ? or CAST(vent.fecha AS DATE) = CAST(vent.fecha AS DATE)) ";
+        }
         $sql = "$sql ORDER BY vent.fecha desc LIMIT ?,?";
         $stmt = $conn->prepare($sql);
         if (false === $stmt) {
             die('prepare() failed: ' . $conn->error);
         }
-        $result = $stmt->bind_param("iiiii", $id_empleado, $id_producto, $id_cliente, $calc_page, $num_results_on_page);
+        $result = $stmt->bind_param("iiisii", $id_empleado, $id_producto, $id_cliente, $fecha, $calc_page, $num_results_on_page);
         if (false === $result) {
             die('bind_param() failed' . $stmt->error);
         }

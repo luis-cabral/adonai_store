@@ -77,55 +77,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         <h2>Gestión de Puntos de Venta</h2>
         <a href="#" class="btn btn-principal mb-3" data-bs-toggle="modal" data-bs-target="#addPunto_ventaModal">Agregar Punto_venta</a>
 
-        <!-- Tabla de puntos_venta -->
-        <table class="table table-striped table-responsive caption-top">
-            <caption>
-                <div class="btn-group">
-                    <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                        Lista de <?php echo $num_results_on_page ?> Registros de <?php echo $total_pages ?>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
-                        <li><a class="dropdown-item" href="gestion_puntos_venta.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=5">5</a></li>
-                        <li><a class="dropdown-item" href="gestion_puntos_venta.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=10">10</a></li>
-                        <li><a class="dropdown-item" href="gestion_puntos_venta.php?<?php if ($estado != "TODO"): echo "e=$estado&";
-                                                                                    endif; ?>pn=<?php echo $page ?>&nrop=15">15</a></li>
-                    </ul>
-                </div>
-            </caption>
-            <thead class="table-principal">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Direccion</th>
-                    <th>
-                        <div class="btn-group">
-                            <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                Estado
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
-                                <li><a class="dropdown-item" href="gestion_puntos_venta.php?e=TODO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
-                                <li><a class="dropdown-item" href="gestion_puntos_venta.php?e=ACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">ACTIVO</a></li>
-                                <li><a class="dropdown-item" href="gestion_puntos_venta.php?e=INACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">INACTIVO</a></li>
-                            </ul>
-                        </div>
-                    </th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($punto_venta = $result->fetch_assoc()): ?>
+        <!-- Tabla de clientes responsive -->
+        <div class="table-responsive">
+            <!-- Tabla de clientes -->
+            <table class="table table-bordered table-striped caption-top">
+                <caption>
+                    <div class="btn-group">
+                        <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                            Lista de <?php echo $num_results_on_page ?> Registros de <?php echo $total_pages ?>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
+                            <li><a class="dropdown-item" href="gestion_puntos_venta.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=5">5</a></li>
+                            <li><a class="dropdown-item" href="gestion_puntos_venta.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=10">10</a></li>
+                            <li><a class="dropdown-item" href="gestion_puntos_venta.php?<?php if ($estado != "TODO"): echo "e=$estado&";
+                                                                                        endif; ?>pn=<?php echo $page ?>&nrop=15">15</a></li>
+                        </ul>
+                    </div>
+                </caption>
+                <thead class="table-principal">
                     <tr>
-                        <td><?php echo $punto_venta['nombre']; ?></td>
-                        <td><?php echo $punto_venta['direccion']; ?></td>
-                        <td><?php echo $punto_venta['estado']; ?></td>
-                        <td>
-                            <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updPunto_ventaModal" onclick="loadData(<?php echo htmlspecialchars(json_encode($punto_venta)); ?>)">Editar</a>
-                        </td>
+                        <th>Nombre</th>
+                        <th>Direccion</th>
+                        <th>
+                            <div class="btn-group">
+                                <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="EstadoDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    Estado
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="EstadoDropdown">
+                                    <li><a class="dropdown-item" href="gestion_puntos_venta.php?e=TODO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">TODO</a></li>
+                                    <li><a class="dropdown-item" href="gestion_puntos_venta.php?e=ACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">ACTIVO</a></li>
+                                    <li><a class="dropdown-item" href="gestion_puntos_venta.php?e=INACTIVO&pn=<?php echo $page ?>&nrop=<?php echo $num_results_on_page ?>">INACTIVO</a></li>
+                                </ul>
+                            </div>
+                        </th>
+                        <th>Acciones</th>
                     </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php while ($punto_venta = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo $punto_venta['nombre']; ?></td>
+                            <td><?php echo $punto_venta['direccion']; ?></td>
+                            <td><?php echo $punto_venta['estado']; ?></td>
+                            <td>
+                                <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updPunto_ventaModal" onclick="loadData(<?php echo htmlspecialchars(json_encode($punto_venta)); ?>)">Editar</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
         <?php if (ceil($total_pages / $num_results_on_page) > 0): ?>
             <nav aria-label="Navegación de la página" class="py-1">
                 <ul class="pagination pagination-sm justify-content-center">
@@ -206,12 +209,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="gestion_puntos_venta.php" method="POST">
-                        <div class="mb-3">
+                    <form action="gestion_puntos_venta.php" method="POST" class="row g-3 was-validated">
+                        <div class="col-md-6">
                             <label for="nombre" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-md-6">
                             <label for="direccion" class="form-label">Direccion</label>
                             <input type="text" class="form-control" id="direccion" name="direccion" required>
                         </div>
@@ -231,17 +234,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="punto_venta-edit-form" action="gestion_puntos_venta.php" method="POST">
+                    <form id="punto_venta-edit-form" action="gestion_puntos_venta.php" method="POST" class="row g-3 was-validated">
                         <input type="hidden" name="id_punto_venta" id="id_punto_venta">
-                        <div class="mb-3">
+                        <div class="col-md-6">
                             <label for="nombre" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-md-6">
                             <label for="direccion" class="form-label">Direccion</label>
                             <input type="text" class="form-control" id="direccion" name="direccion" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-md-6">
                             <label for="estado" class="form-label">Estado</label>
                             <select class="form-select" id="estado" name="estado" required>
                                 <option value="ACTIVO">Activo</option>
