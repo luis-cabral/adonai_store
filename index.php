@@ -231,7 +231,7 @@ while ($row = $result->fetch_assoc()) {
         // Datos para el gráfico
         // Obtener todas las fechas únicas
         let data = <?php echo json_encode($ventas_list); ?>;
-        console.log(data);
+        //console.log(data);
         const fechas = [...new Set(data.map(item => item.fecha))];
 
         // Organizar datos por descripción
